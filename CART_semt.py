@@ -27,6 +27,7 @@ for train_index,test_index in kf.split(x):
     clt = model.fit(x[train_index],y[train_index])
     y_predict = model.predict(x[test_index])
     curr_acc = curr_acc + accuracy_score(y_predict,y[test_index])
+    #print(clt.score(x[test_index],y[test_index]))
 print("模型准确率为:",curr_acc/10)
 
 #数据可视化
