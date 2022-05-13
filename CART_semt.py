@@ -1,0 +1,32 @@
+import jieba
+import pandas as pd
+import numpy as np
+from gensim.models.word2vec import Word2Vec
+import warnings
+warnings.filterwarnings('ignore')  #ignore warning
+import joblib
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import KFold
+from sklearn.metrics import accuracy_score
+
+#CART模型
+#导入词向量作为训练特征
+x = np.load('train_x_vec.npy')
+#导入情绪分类作为目标特征
+y = np.load('train_y.npy')
+
+model = DecisionTreeClassifier()
+
+#采用10折交叉验证法训练模型
+kf = KFold(n_splits=10,shuffle=True,random_state=0)
+curr_acc = 0
+for train_index,test_index in kf.split(x):
+    #print(train_index.shape)             #(1260,)
+    clt = model.fit(x[train_index],y[train_index])
+    y_predict = model.predict(x[test_index])
+    curr_acc = curr_acc + accuracy_score(y_predict,y[test_index])
+    #print(clt.score(x[test_index],y[test_index]))
+print("模型准确率为:",curr_acc/10)
+
+#保存模型为二进制文件
+joblib.dump(model,'dt_model.pkl')
