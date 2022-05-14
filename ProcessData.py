@@ -18,6 +18,8 @@ np.save('train_y.npy',train_y)
 
 #x值（训练集）
 pd_x = pd.read_csv('take-out.csv',encoding='gbk',usecols=['review'])
+
+
 #分词处理
 list_x = []
 for i in range(0,2000):
